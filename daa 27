@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+
+void printPattern(int row, int col, int n) {
+    
+    if (row > n)
+        return;
+    
+    
+    if (col > row) {
+        printf("\n");
+        printPattern(row + 1, 1, n); 
+        return;
+    }
+    
+    
+    printf("%d ", col);
+    
+   
+    printPattern(row, col + 1, n);
+}
+
+int main() {
+    int n;
+    printf("Enter the value of n: ");
+    scanf("%d", &n);
+    
+   
+    printPattern(1, 1, n);
+    
+    return 0;
+}
