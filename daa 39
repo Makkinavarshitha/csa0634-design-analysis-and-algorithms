@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+
+#define N 10
+
+int minCost; // Minimum cost for assignment
+int minAssignment[N]; // Best assignment configuration
+bool assigned[N]; // Keeps track of assigned jobs
+
+int costMatrix[N][N]; // Cost matrix for assignment
+int numJobs; // Number of jobs
+
+void printAssignment() {
+    printf("Minimum Cost Assignment:\n");
+    for (int i = 0; i < numJobs; i++) {
+        printf("Job %d assigned to Worker %d (Cost: %d)\n", i, minAssignment[i], costMatrix[i][minAssignment[i]]);
+    }
+}
+
+// Function to calculate the cost of assigning the job to the worker
+int calculateCost(int job, int worker) {
+    return costMatrix[job][worker];
+}
+
+// Recursive function to find the minimum cost assignment
+void assignJobs(int job, int totalCost) {
+    if (job == numJobs) {
+        if (totalCost < minCost) {
+            minCost = totalCost;
+            for (int i = 0; i < numJobs; i++) {
+                minAssignment[i] = assigned[i];
+            }
+        }
+        return;
+    }
+
+    for (int i = 0; i < numJobs; i++) {
+        if (!assigned[i]) {
+            assigned[i] = true;
+            int cost = calculateCost(job, i);
+            if (totalCost + cost < minCost) {
+                assignJobs(job + 1, totalCost + cost);
+            }
+            assigned[i] = false;
+        }
+    }
+}
+
+int main() {
+    printf("Enter the number of jobs (<=10): ");
+    scanf("%d", &numJobs);
+    if (numJobs > 10 || numJobs <= 0) {
+        printf("Invalid input.\n");
+        return 1;
+    }
+
+    printf("Enter the cost matrix for assignment (%d x %d matrix):\n", numJobs, numJobs);
+    for (int i = 0; i < numJobs; i++) {
+        for (int j = 0; j < numJobs; j++) {
+            scanf("%d", &costMatrix[i][j]);
+        }
+    }
+
+    minCost = INT_MAX;
+    assignJobs(0, 0);
+
+    printf("Minimum Cost: %d\n", minCost);
+    printAssignment();
+
+    return 0;
+}
