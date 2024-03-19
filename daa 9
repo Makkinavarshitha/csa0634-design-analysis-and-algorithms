@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <time.h>
+
+#define MAX_SIZE 100
+
+void multiplyMatrices(int firstMatrix[MAX_SIZE][MAX_SIZE], int secondMatrix[MAX_SIZE][MAX_SIZE], int result[MAX_SIZE][MAX_SIZE], int m, int n, int p) {
+    int i, j, k;
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < p; j++) {
+            result[i][j] = 0;
+            for (k = 0; k < n; k++) {
+                result[i][j] += firstMatrix[i][k] * secondMatrix[k][j];
+            }
+        }
+    }
+}
+
+int main() {
+    int m, n, p, i, j;
+    int firstMatrix[MAX_SIZE][MAX_SIZE], secondMatrix[MAX_SIZE][MAX_SIZE], result[MAX_SIZE][MAX_SIZE];
+
+    printf("Enter the number of rows and columns of first matrix: ");
+    scanf("%d %d", &m, &n);
+    printf("Enter the number of columns of second matrix: ");
+    scanf("%d", &p);
+
+    printf("Enter elements of first matrix:\n");
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &firstMatrix[i][j]);
+        }
+    }
+
+    printf("Enter elements of second matrix:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < p; j++) {
+            scanf("%d", &secondMatrix[i][j]);
+        }
+    }
+
+    clock_t start, end;
+    start = clock();
+    multiplyMatrices(firstMatrix, secondMatrix, result, m, n, p);
+    end = clock();
+
+    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Time taken for matrix multiplication: %f seconds\n", time_taken);
+
+    return 0;
+}
