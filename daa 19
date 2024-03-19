@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int weight;
+    int value;
+    float density;
+} Item;
+
+int compare(const void *a, const void *b) {
+    float densityA = ((Item *)a)->density;
+    float densityB = ((Item *)b)->density;
+    return densityB - densityA;
+}
+
+float fractionalKnapsack(int capacity, Item items[], int n) {
+    qsort(items, n, sizeof(Item), compare);
+
+    float totalValue = 0.0;
+    int currentWeight = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (currentWeight + items[i].weight <= capacity) {
+            currentWeight += items[i].weight;
+            totalValue += items[i].value;
+        } else {
+            int remaining = capacity - currentWeight;
+            totalValue += items[i].density * remaining;
+            break;
+        }
+    }
+
+    return totalValue;
+}
+
+int main() {
+    int n, capacity;
+
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+
+    Item items[n];
+    printf("Enter the weight and value of each item:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d %d", &items[i].weight, &items[i].value);
+        items[i].density = (float)items[i].value / items[i].weight;
+    }
+
+    printf("Enter the capacity of the knapsack: ");
+    scanf("%d", &capacity);
+
+    float maxValue = fractionalKnapsack(capacity, items, n);
+    printf("Maximum value in the knapsack = %.2f\n", maxValue);
+
+    return 0;
+}
